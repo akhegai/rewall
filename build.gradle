@@ -19,6 +19,7 @@ ext {
     daggerVersion = '2.17'
     retrofitVersion = '2.0.0'
     converterMoshi = '2.0.0'
+    okhttpVersion = '3.11.0'
 }
 
 allprojects {

@@ -4,7 +4,7 @@ import dagger.Component
 import e.akhegai.rewall.RewallApplication
 import e.akhegai.rewall.di.module.ApplicationModule
 
-@Component(modules = arrayOf(ApplicationModule::class))
+@Component(modules = [ApplicationModule::class])
 interface ApplicationComponent {
 
     fun inject(application: RewallApplication)
