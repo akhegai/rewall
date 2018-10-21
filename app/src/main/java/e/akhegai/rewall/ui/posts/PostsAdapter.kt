@@ -2,6 +2,7 @@ package e.akhegai.rewall.ui.posts
 
 import android.content.Context
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +23,19 @@ class PostsAdapter(private val mContext: Context, private val posts: MutableList
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView
-                ?: LayoutInflater.from(mContext).inflate(R.layout.post_item_layout, parent, false)
+        val imageView: ImageView
+        if (convertView == null) {
+            imageView = ImageView(mContext)
+            imageView.layoutParams = ViewGroup.LayoutParams(85, 85)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            imageView.setPadding(8, 8, 8, 8)
+        } else {
+            imageView = convertView as ImageView
+        }
         Glide.with(mContext)
-                .load(posts[position])
-                .into(view as ImageView)
-        return view
+                .load(posts[position].thumbnail)
+                .into(imageView)
+        return imageView
     }
 
     override fun getItem(position: Int): Any = posts[position]

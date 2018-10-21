@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
 import e.akhegai.rewall.R
 import e.akhegai.rewall.common.RedditPosts
 import e.akhegai.rewall.common.RedditPostsItem
@@ -23,7 +24,7 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        rootView = inflater.inflate(R.layout.post_item_list, container, false)
+        rootView = inflater.inflate(R.layout.post_items_grid, container, false)
         return rootView
     }
 
@@ -39,6 +40,9 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
 
     override fun loadDataSuccess(posts: RedditPosts) {
         val adapter = PostsAdapter(requireActivity(), posts.Posts.toMutableList(), this)
+        Log.i("loadDataSuccess", "posts")
+        val gridview: GridView = view!!.findViewById(R.id.post_items_grid)
+        gridview.adapter = adapter
     }
 
 

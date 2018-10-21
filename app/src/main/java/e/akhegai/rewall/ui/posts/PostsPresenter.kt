@@ -21,10 +21,11 @@ class PostsPresenter @Inject constructor(private val postsApi: PostsApi) : Posts
     override fun loadData() {
         postsApi.getPosts("wallpaper", "month").enqueue(object : Callback<RedditNewsResponse> {
             override fun onFailure(call: Call<RedditNewsResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed")
+                Log.v("retrofit", "call failed" + t.toString())
             }
 
             override fun onResponse(call: Call<RedditNewsResponse>?, response: Response<RedditNewsResponse>?) {
+                Log.v("retrofit", "call success")
                 response?.let {
                     view.loadDataSuccess(process(response.body()!!))
                 }
@@ -39,7 +40,7 @@ class PostsPresenter @Inject constructor(private val postsApi: PostsApi) : Posts
             val item = it.data
             RedditPostsItem(item.author, item.title, item.num_comments,
                     item.created, item.thumbnail, item.url)
-        }
+            }
         return RedditPosts(
                 dataResponse.after.orEmpty(),
                 dataResponse.before.orEmpty(),
