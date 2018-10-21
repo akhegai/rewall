@@ -1,10 +1,8 @@
 package e.akhegai.rewall.ui.posts
 
-import android.util.Log
 import e.akhegai.rewall.common.RedditPosts
 import e.akhegai.rewall.common.RedditPostsItem
 import e.akhegai.rewall.data.remote.PostsApi
-import e.akhegai.rewall.data.remote.RedditApi
 import e.akhegai.rewall.data.remote.RedditNewsResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,15 +17,16 @@ class PostsPresenter @Inject constructor(private val postsApi: PostsApi) : Posts
     }
 
     override fun loadData() {
-        postsApi.getPosts("wallpaper", "month").enqueue(object : Callback<RedditNewsResponse> {
+        view.onLoadDataStart()
+        postsApi.getHot("wallpaper", 20).enqueue(object : Callback<RedditNewsResponse> {
             override fun onFailure(call: Call<RedditNewsResponse>?, t: Throwable?) {
-                Log.v("retrofit", "call failed" + t.toString())
+                view.loadDataFailure(t?.message)
             }
-
             override fun onResponse(call: Call<RedditNewsResponse>?, response: Response<RedditNewsResponse>?) {
-                Log.v("retrofit", "call success")
                 response?.let {
                     view.loadDataSuccess(process(response.body()!!))
+                } ?: run {
+                    view.loadDataFailure(null)
                 }
             }
 
