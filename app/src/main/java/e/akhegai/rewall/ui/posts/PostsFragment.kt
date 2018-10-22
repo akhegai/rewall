@@ -43,23 +43,25 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
     }
 
     override fun onLoadDataStart() {
-        progress_bar.visibility = View.VISIBLE
+        progress_bar?.visibility = View.VISIBLE
         post_items_grid.visibility = View.GONE
         post_items_error_layout.visibility = View.GONE
     }
 
     override fun loadDataSuccess(posts: RedditPosts) {
-        progress_bar.visibility = View.GONE
-        post_items_grid.visibility = View.VISIBLE
-        val context = requireActivity()
-        val layoutManager = GridLayoutManager(context, 3)
-        post_items_grid.layoutManager = layoutManager
-        val adapter = PostsAdapter(context, posts.Posts.toMutableList(), this)
-        post_items_grid.adapter = adapter
+        progress_bar?.visibility = View.GONE
+        post_items_grid?.let {
+            post_items_grid.visibility = View.VISIBLE
+            val context = requireActivity()
+            val layoutManager = GridLayoutManager(context, 3)
+            post_items_grid.layoutManager = layoutManager
+            val adapter = PostsAdapter(context, posts.Posts.toMutableList(), this)
+            post_items_grid.adapter = adapter
+        }
     }
 
     override fun loadDataFailure(message: String?) {
-        progress_bar.visibility = View.GONE
+        progress_bar?.visibility = View.GONE
         post_items_grid.visibility = View.GONE
         post_items_error_layout.visibility = View.VISIBLE
         post_items_error_text.text = message ?: getString(R.string.unknown_error_message)
