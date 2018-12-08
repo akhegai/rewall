@@ -3,17 +3,15 @@ package e.akhegai.rewall.ui.posts
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
 import e.akhegai.rewall.R
 import e.akhegai.rewall.common.RedditPosts
 import e.akhegai.rewall.common.RedditPostsItem
 import e.akhegai.rewall.di.component.DaggerPostsComponent
 import e.akhegai.rewall.di.module.PostsModule
+import e.akhegai.rewall.ui.singlePost.SinglePostFragment
 import kotlinx.android.synthetic.main.post_items_grid.*
 import javax.inject.Inject
 
@@ -36,10 +34,6 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
         super.onViewCreated(view, savedInstanceState)
         presenter.attach(this)
         initView()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
     override fun onLoadDataStart() {
@@ -71,7 +65,15 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
     }
 
     override fun onItemClick(post: RedditPostsItem) {
-        Log.e("onItemClick", post.toString())
+        val postFragment = SinglePostFragment()
+        val bundle = Bundle()
+        bundle.putString("author", post.author)
+        bundle.putString("title", post.title)
+        bundle.putString("url", post.url)
+        postFragment.arguments = bundle
+        fragmentManager?.let {
+            it.beginTransaction().replace(R.id.frame, postFragment, PostsFragment.TAG).addToBackStack("PostsFragment").commit()
+        }
     }
 
     override fun onRetryButtonClick(view: View) {
@@ -91,6 +93,6 @@ class PostsFragment : Fragment(), PostsContract.View, PostsAdapter.onPostClickLi
     }
 
     companion object {
-        val TAG: String = "PostsFragment"
+        const val TAG: String = "PostsFragment"
     }
 }

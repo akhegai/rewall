@@ -1,16 +1,12 @@
 package e.akhegai.rewall.ui.posts
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import e.akhegai.rewall.R
 import e.akhegai.rewall.common.RedditPostsItem
@@ -30,7 +26,7 @@ class PostsAdapter(private val mContext: Context, private val posts: MutableList
         holder.bind(posts[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, vieπwType: Int): PostViewHolder {
         val itemView = LayoutInflater.from(mContext).inflate(R.layout.post_item_layout, parent, false)
         return PostViewHolder(itemView)
     }
@@ -41,11 +37,13 @@ class PostsAdapter(private val mContext: Context, private val posts: MutableList
         notifyItemRangeChanged(initPosition, postsToAdd.size)
     }
 
-    inner class PostViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        private val layout = itemView.findViewById<RelativeLayout>(R.id.grid_post_item_layout)
+    inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val image = itemView.findViewById<ImageView>(R.id.grid_post_item_image)
 
         fun bind(item: RedditPostsItem) {
+            image.setOnClickListener {
+                listener.onItemClick(item)
+            }
             Glide.with(mContext)
                     .load(item.thumbnail)
                     .into(image)

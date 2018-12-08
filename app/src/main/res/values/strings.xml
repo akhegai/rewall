@@ -3,4 +3,6 @@
     <string name="grid_image_description">Grid image</string>
     <string name="unknown_error_message">Something went wrong</string>
     <string name="retry">Retry</string>
+    <string name="loading">Loading…</string>
+    <string name="set_background_image_button">Set as background</string>
 </resources>
