@@ -6,7 +6,5 @@ class SinglePostContract {
 
     interface View: BaseContract.View
 
-    interface Presenter: BaseContract.Presenter<View> {
-        fun setBackground()
-    }
+    interface Presenter: BaseContract.Presenter<View>
 }

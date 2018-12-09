@@ -18,10 +18,11 @@ class PostsPresenter @Inject constructor(private val postsApi: PostsApi) : Posts
 
     override fun loadData() {
         view.onLoadDataStart()
-        postsApi.getHot("wallpaper", 20).enqueue(object : Callback<RedditNewsResponse> {
+        postsApi.getHot("wallpaper", 100).enqueue(object : Callback<RedditNewsResponse> {
             override fun onFailure(call: Call<RedditNewsResponse>?, t: Throwable?) {
                 view.loadDataFailure(t?.message)
             }
+
             override fun onResponse(call: Call<RedditNewsResponse>?, response: Response<RedditNewsResponse>?) {
                 response?.let {
                     view.loadDataSuccess(process(response.body()!!))
@@ -35,11 +36,15 @@ class PostsPresenter @Inject constructor(private val postsApi: PostsApi) : Posts
 
     private fun process(response: RedditNewsResponse): RedditPosts {
         val dataResponse = response.data
-        val news = dataResponse.children.map {
-            val item = it.data
-            RedditPostsItem(item.author, item.title, item.num_comments,
-                    item.created, item.thumbnail, item.url)
-            }
+        val news = dataResponse.children
+                .filter {
+                    it.data.url.endsWith(".png") || it.data.url.endsWith(".jpg")
+                }
+                .map {
+                    val item = it.data
+                    RedditPostsItem(item.author, item.title, item.num_comments,
+                            item.created, item.thumbnail, item.url)
+                }
         return RedditPosts(
                 dataResponse.after.orEmpty(),
                 dataResponse.before.orEmpty(),
